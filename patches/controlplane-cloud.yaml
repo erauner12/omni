@@ -76,6 +76,13 @@ machine:
       - bind
       - rshared
       - rw
+    - destination: /var/redis
+      type: bind
+      source: /var/redis
+      options:
+      - bind
+      - rshared
+      - rw
     - destination: /var/uptime-kuma
       type: bind
       source: /var/uptime-kuma
