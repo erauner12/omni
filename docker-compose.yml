@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  omni:
+    image: ghcr.io/siderolabs/omni:v0.51.0
+    env_file: ./.env
+    command: >
+      server
+      --account-id=${OMNI_ACCOUNT_ID}
+      --name=${OMNI_NAME}
+      --advertise-address=${OMNI_ADVERTISE_ADDRESS}
+      --api-server-advertise-address=${OMNI_API_SERVER_ADVERTISE_ADDRESS}
+      --api-server-port=4443
+      --wireguard-port=50180
+      --auth0-audience=${AUTH0_AUDIENCE}
+      --auth0-client-id=${AUTH0_CLIENT_ID}
+      --auth0-domain=${AUTH0_DOMAIN}
+      --initial-user=${OMNI_INITIAL_USER}
+      --region=${OMNI_REGION}
+      --telemetry=${OMNI_TELEMETRY_ENABLED}
+      --etcd-endpoints=http://etcd:12379
+      --private-key-path=${OMNI_PRIVATE_KEY_PATH}
+    ports:
+      - "4443:4443"    # HTTPS / gRPC
+      - "50180:50180/udp"   # WireGuard (optional – won’t work off-LAN without extra routing)
+    volumes:
+      # Bind-mount the current dir’s key (generate later with `gpg --gen-key` or `age-keygen`)
+      - ./omni.asc:${OMNI_PRIVATE_KEY_PATH}:ro
+    depends_on:
+      - etcd
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.14
+    command: |
+      etcd
+        --name infra0
+        --advertise-client-urls http://0.0.0.0:12379
+        --listen-client-urls http://0.0.0.0:12379
+        --data-dir /etcd-data
+    volumes:
+      - ./etcd-data:/etcd-data
