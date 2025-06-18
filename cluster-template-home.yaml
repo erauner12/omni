@@ -4,7 +4,7 @@ name: erauner-home                       # Cluster name in Omni
 talos:
   version: v1.10.4               # same as Ken – change if you like
 kubernetes:
-  version: 1.33.2
+  version: 1.31.5                # latest patch in the supported minor
 features:
   enableWorkloadProxy: true      # SaaS Omni feature – leave on
 patches:
@@ -13,11 +13,9 @@ patches:
   # Add cert patches here later if you decide to keep them
 
 ---
-
-# TODO: add back when you get the control plane machine UUID
 kind: ControlPlane
 machines:
-  - 30467aa4-b8a4-2e43-8591-a8595f97a43c # controlplane-1
+  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # Make the *online* box the CP
 patches:
   - name: controlplane-base
     file: ./patches/controlplane.yaml
@@ -31,9 +29,8 @@ patches:
 kind: Workers
 name: workers
 machines:
-  # - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1
-  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # worker-2
-  - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-3
+  - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1 (offline right now)
+  - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-2 (offline)
 patches:
   - name: worker-base
     file: ./patches/worker.yaml
@@ -44,13 +41,13 @@ patches:
 
 ---
 kind: Machine
-name: 30467aa4-b8a4-2e43-8591-a8595f97a43c
+name: 30467aa4-b8a4-2e43-8591-a8595f97a43c # Now controlplane1
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "worker1"
+          hostname: "controlplane1" # Changed from worker1
 ---
 kind: Machine
 name: 4913bb46-7cd8-2048-84c7-a8595f97a48c
