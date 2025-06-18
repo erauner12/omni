@@ -1,116 +1,71 @@
+# cluster-template-home.yaml
 kind: Cluster
-name: home
+name: erauner-home                       # Cluster name in Omni
 talos:
-  version: v1.10.4
+  version: v1.10.4               # same as Ken – change if you like
 kubernetes:
   version: 1.33.2
 features:
-  enableWorkloadProxy: true
-  backupConfiguration:
-    interval: 12h
+  enableWorkloadProxy: true      # SaaS Omni feature – leave on
 patches:
   - name: cluster-base
-    file: /home/ken/omni/patches/cluster.yaml
-  - name: cluster-certs
-    file: /home/ken/omni/patches/cluster-certs-home.yaml
+    file: ./patches/cluster.yaml   # relative path because repo will be synced
+  # Add cert patches here later if you decide to keep them
 
 ---
+
+# TODO: add back when you get the control plane machine UUID
 kind: ControlPlane
 machines:
-  - 4e211131-23e7-f477-9437-94c691a76e7c  # NUC1
-  - 11b61e33-615e-b264-459a-94c691a81113  # NUC2
-  - 375c6280-f387-11ee-8fd7-a05890310d00  # NUC3
+  - 30467aa4-b8a4-2e43-8591-a8595f97a43c # controlplane-1
 patches:
   - name: controlplane-base
-    file: /home/ken/omni/patches/controlplane.yaml
-  - name: machine-certs
-    file: /home/ken/omni/patches/machine-certs-home.yaml
-  - name: machine-hostdns
-    file: /home/ken/omni/patches/machine-hostdns.yaml
-  - name: registries
-    file: /home/ken/omni/patches/machine-registries.yaml
+    file: ./patches/controlplane.yaml
+  - name: machine-hostdns         # comment out if you dropped the file
+    file: ./patches/machine-hostdns.yaml
   - name: kubelet
-    file: /home/ken/omni/patches/machine-kubelet.yaml
+    file: ./patches/machine-kubelet.yaml
+  # (Add machine-certs patch here only if you kept it)
 
 ---
 kind: Workers
 name: workers
 machines:
-  - 97a2d280-f38e-11ee-980a-d4742c7d1a00  # NUC4
-  - a0011900-f433-11ee-b7fb-0d3ea5620600  # NUC5
-  - 464e1e00-f436-11ee-8bb0-bd5bcd350500  # NUC6
+  # - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1
+  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # worker-2
+  - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-3
 patches:
   - name: worker-base
-    file: /home/ken/omni/patches/worker.yaml
-  - name: certs
-    file: /home/ken/omni/patches/machine-certs-home.yaml
-  - name: machine-hostdns
-    file: /home/ken/omni/patches/machine-hostdns.yaml
-  - name: registries
-    file: /home/ken/omni/patches/machine-registries.yaml
+    file: ./patches/worker.yaml
+  - name: machine-hostdns         # comment out if you dropped it
+    file: ./patches/machine-hostdns.yaml
   - name: kubelet
-    file: /home/ken/omni/patches/machine-kubelet.yaml
-systemExtensions:
-  - siderolabs/iscsi-tools
-  - siderolabs/util-linux-tools
-  - siderolabs/i915
+    file: ./patches/machine-kubelet.yaml
 
 ---
 kind: Machine
-name: 4e211131-23e7-f477-9437-94c691a76e7c
+name: 30467aa4-b8a4-2e43-8591-a8595f97a43c
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "nuc1"
-
+          hostname: "worker1"
 ---
 kind: Machine
-name: 11b61e33-615e-b264-459a-94c691a81113
+name: 4913bb46-7cd8-2048-84c7-a8595f97a48c
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "nuc2"
-
+          hostname: "worker2"
 ---
 kind: Machine
-name: 375c6280-f387-11ee-8fd7-a05890310d00
+name: d3945f76-fb6b-c244-9ca3-a8595f9b4f7e
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "nuc3"
-
----
-kind: Machine
-name: 97a2d280-f38e-11ee-980a-d4742c7d1a00
-patches:
-  - name: set-nodename
-    inline:
-      machine:
-        network:
-          hostname: "nuc4"
-
----
-kind: Machine
-name: a0011900-f433-11ee-b7fb-0d3ea5620600
-patches:
-  - name: set-nodename
-    inline:
-      machine:
-        network:
-          hostname: "nuc5"
-
----
-kind: Machine
-name: 464e1e00-f436-11ee-8bb0-bd5bcd350500
-patches:
-  - name: set-nodename
-    inline:
-      machine:
-        network:
-          hostname: "nuc6"
+          hostname: "worker3"
