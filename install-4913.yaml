@@ -1,0 +1,12 @@
+# install-4913.yaml
+apiVersion: omni.sidero.dev/v1alpha1
+kind: MachineAction
+metadata:
+  generateName: install-
+  namespace: default
+spec:
+  machineID: 4913bb46-7cd8-2048-84c7-a8595f97a48c
+  cluster: erauner-home
+  machineSet: erauner-home-control-planes
+  install:
+    device: /dev/nvme0n1
