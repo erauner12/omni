@@ -29,7 +29,8 @@ patches:
       machine:
         network:
           interfaces:
-            - interface: eth0
+            - deviceSelector:          # ⬅️  change
+                hardwareAddr: e8:ff:1e:dd:18:63   # CP MAC
               dhcp: false
               addresses:
                 - 192.168.1.193/24    # << static for controlplane1
@@ -64,7 +65,8 @@ patches:
         network:
           hostname: "controlplane1"
           interfaces:
-            - interface: eth0
+            - deviceSelector:
+                hardwareAddr: e8:ff:1e:dd:18:63
               dhcp: false
               addresses: [192.168.1.193/24]
               gateway: 192.168.1.1
@@ -80,7 +82,8 @@ patches:
         network:
           hostname: "worker1"
           interfaces:
-            - interface: eth0
+            - deviceSelector:
+                hardwareAddr: b0:41:6f:16:5e:67
               dhcp: false
               addresses: [192.168.1.194/24]
               gateway: 192.168.1.1
@@ -96,7 +99,8 @@ patches:
         network:
           hostname: "worker2"
           interfaces:
-            - interface: eth0
+            - deviceSelector:
+                hardwareAddr: b0:41:6f:16:a2:3f
               dhcp: false
               addresses: [192.168.1.195/24]
               gateway: 192.168.1.1
@@ -112,7 +116,8 @@ patches:
         network:
           hostname: "worker3"
           interfaces:
-            - interface: eth0
+            - deviceSelector:
+                hardwareAddr: b0:41:6f:16:a3:01
               dhcp: false
               addresses: [192.168.1.196/24]
               gateway: 192.168.1.1
