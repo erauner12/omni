@@ -4,13 +4,14 @@ metadata:
   generateName: install-
   namespace: default
 spec:
-  machineID: 4913bb46-7cd8-2048-84c7-a8595f97a48c
+  machineRef:                     # point at the *existing* Machine object
+    name: 4913bb46-7cd8-2048-84c7-a8595f97a48c
+    namespace: default
   install:
-    # old schema wants objects, not bare strings
+    disk: /dev/nvme0n1            # <— adjust if it’s sda, mmcblk0, etc.
     clusterRef:
       name: erauner-home
-      namespace: default         # or whatever namespace you use
+      namespace: default
     machineSetRef:
       name: erauner-home-control-planes
       namespace: default
-    disk: /dev/nvme0n1            # key is `disk`, not `device`
