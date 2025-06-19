@@ -24,7 +24,18 @@ patches:
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
   # (Add machine-certs patch here only if you kept it)
-
+  - name: static-ip
+    inline:
+      machine:
+        network:
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses:
+                - 192.168.1.193/24    # << static for controlplane1
+              gateway: 192.168.1.1
+              nameservers:
+                - 192.168.1.1
 ---
 kind: Workers
 name: workers
@@ -40,26 +51,59 @@ patches:
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
 
+#######################################################################
+# ─── PER-NODE HOSTNAME + STATIC IP PATCHES ──────────────────────────
+#######################################################################
 ---
-kind: Machine
-name: 30467aa4-b8a4-2e43-8591-a8595f97a43c # Now controlplane1
+kind: Machine                           # controlplane1 (already active)
+name: e58acc82-cc4c-d949-b369-bc3898683580
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "controlplane1" # Changed from worker1
+          hostname: "controlplane1"
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses: [192.168.1.193/24]
+              gateway: 192.168.1.1
+              nameservers: [192.168.1.1]
+
 ---
-kind: Machine
+kind: Machine                           # worker1  → 192.168.1.194
+name: 30467aa4-b8a4-2e43-8591-a8595f97a43c
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "worker1"
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses: [192.168.1.194/24]
+              gateway: 192.168.1.1
+              nameservers: [192.168.1.1]
+
+---
+kind: Machine                           # worker2  → 192.168.1.195
 name: 4913bb46-7cd8-2048-84c7-a8595f97a48c
 patches:
   - name: set-nodename
     inline:
       machine:
         network:
-          hostname: "worker2" # new name for the *former* CP
+          hostname: "worker2"
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses: [192.168.1.195/24]
+              gateway: 192.168.1.1
+              nameservers: [192.168.1.1]
+
 ---
-kind: Machine
+kind: Machine                           # worker3  → 192.168.1.196
 name: d3945f76-fb6b-c244-9ca3-a8595f9b4f7e
 patches:
   - name: set-nodename
@@ -67,12 +111,9 @@ patches:
       machine:
         network:
           hostname: "worker3"
----
-kind: Machine
-name: e58acc82-cc4c-d949-b369-bc3898683580
-patches:
-  - name: set-nodename
-    inline:
-      machine:
-        network:
-          hostname: "controlplane1"   # or whatever you like
+          interfaces:
+            - interface: eth0
+              dhcp: false
+              addresses: [192.168.1.196/24]
+              gateway: 192.168.1.1
+              nameservers: [192.168.1.1]
