@@ -1,12 +1,11 @@
-# install-4913.yaml
 apiVersion: omni.sidero.dev/v1alpha1
 kind: MachineAction
 metadata:
-  namespace: default # Ensure namespace is explicitly defined
-  generateName: install- # Keep generateName for unique action names
+  generateName: install-
+  namespace: default
 spec:
   machineID: 4913bb46-7cd8-2048-84c7-a8595f97a48c
-  cluster: erauner-home
-  machineSet: erauner-home-control-planes
   install:
+    cluster: erauner-home
+    machineSet: erauner-home-control-planes
     device: /dev/nvme0n1
