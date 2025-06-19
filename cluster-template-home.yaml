@@ -15,7 +15,7 @@ patches:
 ---
 kind: ControlPlane
 machines:
-  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # Make the *online* box the CP
+  - e58acc82-cc4c-d949-b369-bc3898683580   # Beelink CP
 patches:
   - name: controlplane-base
     file: ./patches/controlplane.yaml
@@ -29,6 +29,7 @@ patches:
 kind: Workers
 name: workers
 machines:
+  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # old CP becomes worker
   - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1 (offline right now)
   - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-2 (offline)
 patches:
@@ -56,7 +57,7 @@ patches:
     inline:
       machine:
         network:
-          hostname: "worker2"
+          hostname: "worker2" # new name for the *former* CP
 ---
 kind: Machine
 name: d3945f76-fb6b-c244-9ca3-a8595f9b4f7e
@@ -66,3 +67,12 @@ patches:
       machine:
         network:
           hostname: "worker3"
+---
+kind: Machine
+name: e58acc82-cc4c-d949-b369-bc3898683580
+patches:
+  - name: set-nodename
+    inline:
+      machine:
+        network:
+          hostname: "controlplane1"   # or whatever you like
