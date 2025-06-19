@@ -1,9 +1,9 @@
-context: onprem-omni
+context: erauner
 contexts:
-    onprem-omni:
+    erauner:
         endpoints:
-            - https://omni.ucdialplans.com/
+            - https://erauner.omni.siderolabs.io
         auth:
             siderov1:
-                identity: ken.lasko@gmail.com
-        cluster: home
+                identity: raunerevan@gmail.com
+
