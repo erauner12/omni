@@ -32,9 +32,10 @@ patches:
             - deviceSelector:          # ⬅️  change
                 hardwareAddr: e8:ff:1e:dd:18:63   # CP MAC
               dhcp: false
-              addresses:
-                - 192.168.1.193/24    # << static for controlplane1
-          defaultGateway: 192.168.1.1
+              addresses: [192.168.1.193/24]    # << static for controlplane1
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
           nameservers:
             - 192.168.1.1
 ---
@@ -69,7 +70,9 @@ patches:
                 hardwareAddr: e8:ff:1e:dd:18:63
               dhcp: false
               addresses: [192.168.1.193/24]
-          defaultGateway: 192.168.1.1
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
           nameservers: [192.168.1.1]
 
 ---
@@ -86,7 +89,9 @@ patches:
                 hardwareAddr: b0:41:6f:16:5e:67
               dhcp: false
               addresses: [192.168.1.194/24]
-          defaultGateway: 192.168.1.1
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
           nameservers: [192.168.1.1]
 
 ---
@@ -103,7 +108,9 @@ patches:
                 hardwareAddr: b0:41:6f:16:a2:3f
               dhcp: false
               addresses: [192.168.1.195/24]
-          defaultGateway: 192.168.1.1
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
           nameservers: [192.168.1.1]
 
 ---
@@ -120,5 +127,7 @@ patches:
                 hardwareAddr: b0:41:6f:16:a3:01
               dhcp: false
               addresses: [192.168.1.196/24]
-          defaultGateway: 192.168.1.1
+              routes:
+                - network: 0.0.0.0/0
+                  gateway: 192.168.1.1
           nameservers: [192.168.1.1]
