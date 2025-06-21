@@ -135,6 +135,15 @@ cluster:
                   - cilium
                   - --version
                   - 1.17.5         # pin to the same chart version you used
+                env:
+                  # Use the node IP (pod IP on host network) instead of the
+                  # Kubernetes service-clusterIP which isn't reachable yet.
+                  - name: KUBERNETES_SERVICE_HOST
+                    valueFrom:
+                      fieldRef:
+                        fieldPath: status.podIP
+                  - name: KUBERNETES_SERVICE_PORT
+                    value: "6443"
                 volumeMounts:
                   - name: cilium-values
                     mountPath: /values.yaml
