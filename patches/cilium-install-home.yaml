@@ -1,0 +1,147 @@
+cluster:
+  inlineManifests:
+  - name: cilium-install-home
+    contents: |
+      ########################################################
+      # 1.  Namespace + values ConfigMap
+      ########################################################
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: cilium
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cilium-values
+        namespace: cilium
+      data:
+        values.yaml: |
+          # --- values cloned from former HelmRelease/patches ---
+          kubeProxyReplacement: true
+          ipam:
+            mode: cluster-pool
+          serviceLB:
+            enabled: true
+            ipam: pool
+            loadBalancerIPRanges:
+              - cidr: 192.168.10.0/24
+          bgpControlPlane:
+            enabled: true
+          bgp:
+            enabled: false
+          upgradeCompatibility: "1.15"
+          cleanState: false
+          cleanBpfState: false
+          nodeinit:
+            enabled: false
+          # securityContext equivalent of capfix.yaml
+          securityContext:
+            capabilities:
+              ciliumAgent:
+                drop: ["ALL"]
+                add:
+                  - CHOWN
+                  - DAC_OVERRIDE
+                  - FOWNER
+                  - FSETID
+                  - IPC_LOCK
+                  - KILL
+                  - MKNOD
+                  - NET_ADMIN
+                  - NET_RAW
+                  - SETFCAP
+                  - SETGID
+                  - SETPCAP
+                  - SETUID
+                  - SYS_CHROOT
+                  - SYS_RESOURCE
+                  - BPF          # eBPF load
+                  - PERFMON
+                  - SYS_ADMIN    # still required by Cilium 1.17
+              cleanCiliumState:
+                drop: ["ALL"]
+                add: ["NET_ADMIN","SYS_ADMIN","SYS_RESOURCE"]
+          hubble:
+            relay:
+              enabled: true
+            ui:
+              enabled: true
+          gatewayAPI:
+            enabled: true
+            secretsNamespace:
+              name: cilium
+              create: false
+              sync: true
+      ########################################################
+      # 2. RBAC for the ephemeral install Job
+      ########################################################
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: cilium-install
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+      subjects:
+        - kind: ServiceAccount
+          name: cilium-install
+          namespace: cilium
+      ---
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: cilium-install
+        namespace: cilium
+      ########################################################
+      # 3. Install Job (cilium-cli)
+      ########################################################
+      ---
+      apiVersion: batch/v1
+      kind: Job
+      metadata:
+        name: cilium-install
+        namespace: cilium
+      spec:
+        backoffLimit: 10
+        template:
+          metadata:
+            labels: {app: cilium-install}
+          spec:
+            serviceAccountName: cilium-install
+            hostNetwork: true          # lets the pod talk to the local API proxy
+            restartPolicy: OnFailure
+            tolerations:
+              - operator: Exists
+            affinity:                   # pin to a control-plane node
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: node-role.kubernetes.io/control-plane
+                          operator: Exists
+            containers:
+              - name: cilium-install
+                image: quay.io/cilium/cilium-cli:v0.16.7
+                command:
+                  - cilium
+                  - install
+                  - -f
+                  - /values.yaml
+                  - -n
+                  - cilium
+                  - --version
+                  - 1.17.5         # pin to the same chart version you used
+                volumeMounts:
+                  - name: cilium-values
+                    mountPath: /values.yaml
+                    subPath: values.yaml
+            volumes:
+              - name: cilium-values
+                configMap:
+                  name: cilium-values
+                  items:
+                    - key: values.yaml
+                      path: values.yaml

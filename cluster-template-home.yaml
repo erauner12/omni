@@ -10,6 +10,8 @@ features:
 patches:
   - name: cluster-base
     file: ./patches/cluster.yaml   # relative path because repo will be synced
+  - name: cilium-install-home
+    file: ./patches/cilium-install-home.yaml
   # Add cert patches here later if you decide to keep them
 
 ---
