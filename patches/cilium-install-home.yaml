@@ -36,6 +36,12 @@ cluster:
             ipam: pool
             loadBalancerIPRanges:
               - cidr: 192.168.10.0/24
+          # ------------------------------------------------------------------
+          # Return-path behaviour (NAT → DSR/Geneve)
+          # ------------------------------------------------------------------
+          loadBalancer:
+            mode: dsr          # Direct-Server-Return
+            dsrDispatch: geneve
           bgpControlPlane:
             enabled: true
           bgp:
@@ -58,6 +64,7 @@ cluster:
                 - MKNOD
                 - NET_ADMIN
                 - NET_RAW
+                - SETFCAP
                 - SETFCAP
                 - SETGID
                 - SETPCAP
