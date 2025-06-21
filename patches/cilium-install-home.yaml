@@ -39,29 +39,28 @@ cluster:
           securityContext:
             capabilities:
               ciliumAgent:
-                drop: ["ALL"]
-                add:
-                  - CHOWN
-                  - DAC_OVERRIDE
-                  - FOWNER
-                  - FSETID
-                  - IPC_LOCK
-                  - KILL
-                  - MKNOD
-                  - NET_ADMIN
-                  - NET_RAW
-                  - SETFCAP
-                  - SETGID
-                  - SETPCAP
-                  - SETUID
-                  - SYS_CHROOT
-                  - SYS_RESOURCE
-                  - BPF          # eBPF load
-                  - PERFMON
-                  - SYS_ADMIN    # still required by Cilium 1.17
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - FSETID
+                - IPC_LOCK
+                - KILL
+                - MKNOD
+                - NET_ADMIN
+                - NET_RAW
+                - SETFCAP
+                - SETGID
+                - SETPCAP
+                - SETUID
+                - SYS_CHROOT
+                - SYS_RESOURCE
+                - BPF          # eBPF load
+                - PERFMON
+                - SYS_ADMIN    # still required by Cilium 1.17
               cleanCiliumState:
-                drop: ["ALL"]
-                add: ["NET_ADMIN","SYS_ADMIN","SYS_RESOURCE"]
+                - NET_ADMIN
+                - SYS_ADMIN
+                - SYS_RESOURCE
           hubble:
             enabled: true
             relay:
