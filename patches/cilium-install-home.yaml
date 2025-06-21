@@ -63,6 +63,7 @@ cluster:
                 drop: ["ALL"]
                 add: ["NET_ADMIN","SYS_ADMIN","SYS_RESOURCE"]
           hubble:
+            enabled: true
             relay:
               enabled: true
             ui:
