@@ -18,6 +18,11 @@ cluster:
       data:
         values.yaml: |
           # --- values cloned from former HelmRelease/patches ---
+          # ------------------------------------------------------------------
+          # 👇 Hard-wire the API-server endpoint so bootstrap never loops
+          k8sServiceHost: localhost
+          k8sServicePort: 6443
+          # ------------------------------------------------------------------
           kubeProxyReplacement: true
           ipam:
             mode: cluster-pool
