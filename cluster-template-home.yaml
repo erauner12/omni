@@ -25,6 +25,13 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
+  # 🆕 inject "bgp=enable" node label for all CP nodes
+  - name: node-labels
+    inline:
+      machine:
+        kubelet:
+          extraArgs:
+            "node-labels": "bgp=enable"
   # (Add machine-certs patch here only if you kept it)
   - name: static-ip
     inline:
@@ -40,6 +47,8 @@ patches:
                   gateway: 192.168.1.1
           nameservers:
             - 192.168.1.1
+        sysctls:
+          net.ipv4.conf.all.rp_filter: "0"
 ---
 kind: Workers
 name: workers
@@ -54,6 +63,13 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
+  # 🆕 inject "bgp=enable" node label for all Workers
+  - name: node-labels
+    inline:
+      machine:
+        kubelet:
+          extraArgs:
+            "node-labels": "bgp=enable"
 
 #######################################################################
 # ─── PER-NODE HOSTNAME + STATIC IP PATCHES ──────────────────────────
@@ -76,6 +92,8 @@ patches:
                 - network: 0.0.0.0/0
                   gateway: 192.168.1.1
           nameservers: [192.168.1.1]
+        sysctls:
+          net.ipv4.conf.all.rp_filter: "0"
 
 ---
 kind: Machine                           # worker1  → 192.168.1.194
@@ -95,6 +113,8 @@ patches:
                 - network: 0.0.0.0/0
                   gateway: 192.168.1.1
           nameservers: [192.168.1.1]
+        sysctls:
+          net.ipv4.conf.all.rp_filter: "0"
 
 ---
 kind: Machine                           # worker2  → 192.168.1.195
@@ -114,6 +134,8 @@ patches:
                 - network: 0.0.0.0/0
                   gateway: 192.168.1.1
           nameservers: [192.168.1.1]
+        sysctls:
+          net.ipv4.conf.all.rp_filter: "0"
 
 ---
 kind: Machine                           # worker3  → 192.168.1.196
@@ -133,3 +155,5 @@ patches:
                 - network: 0.0.0.0/0
                   gateway: 192.168.1.1
           nameservers: [192.168.1.1]
+        sysctls:
+          net.ipv4.conf.all.rp_filter: "0"

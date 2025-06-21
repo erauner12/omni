@@ -26,6 +26,9 @@ cluster:
           routingMode: native
           ipv4NativeRoutingCIDR: 10.0.0.0/24
           kubeProxyReplacement: true
+          nodePort:
+            enabled: true
+            range: "30000,32767"
           ipam:
             mode: cluster-pool
           serviceLB:
