@@ -125,7 +125,7 @@ cluster:
                           operator: Exists
             containers:
               - name: cilium-install
-                image: quay.io/cilium/cilium-cli:v0.16.7
+                image: quay.io/cilium/cilium-cli:v0.18.4
                 command:
                   - cilium
                   - install
