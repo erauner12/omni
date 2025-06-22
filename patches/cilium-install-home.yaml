@@ -35,8 +35,6 @@ cluster:
           serviceLB:
             enabled: true
             ipam: pool
-            loadBalancerIPRanges:
-              - cidr: 192.168.10.0/24
           # ------------------------------------------------------------------
           # Return-path behaviour (NAT → DSR/Geneve)
           # ------------------------------------------------------------------
@@ -91,6 +89,24 @@ cluster:
               name: cilium
               create: false
               sync: true
+          # ------------------------------------------------------------------
+          # The following block was used to apply a *global allow-list* for
+          # LoadBalancer allocations. Cilium's operator consults it *before*
+          # it checks Service selectors or annotations.
+          #
+          # If you leave it uncommented, only the CIDRs listed here are
+          # eligible for automatic ServiceLB allocation, which limits
+          # flexibility when you want to add new LB pools or subnets at runtime.
+          #
+          # By commenting it out entirely, you let Cilium's operator
+          # allocate LoadBalancer IPs from *any* defined pool, giving you
+          # full flexibility. Pools can be managed via the CiliumLoadBalancerIPPool
+          # CRDs without further `values.yaml` or Helm edits.
+          #
+          # (Retained for documentation and reference:)
+          #
+          # loadBalancerIPRanges:
+          #   - cidr: 192.168.10.0/24
       ########################################################
       # 2. RBAC for the ephemeral install Job
       ########################################################
