@@ -33,7 +33,6 @@ cluster:
           # --------- NATIVE ROUTING (table 200) settings ----------
           # Required for multi-node clusters to program direct node routes!
           autoDirectNodeRoutes: true      # (MUST be named exactly as shown)
-          directRoutingDevice: enp1s0     # (main LAN NIC name, no quotes)
           devices: "enp1s0"               # (must be quoted)
           # --------------------------------------------------------
 
@@ -42,6 +41,7 @@ cluster:
           nodePort:
             enabled: true
             range: "30000,32767"
+            directRoutingDevice: enp1s0
           ipam:
             mode: cluster-pool
           serviceLB:
