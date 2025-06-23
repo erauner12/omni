@@ -25,13 +25,13 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
-  # 🆕 inject "bgp=enable" node label for all CP nodes
-  - name: node-labels
-    inline:
-      machine:
-        kubelet:
-          extraArgs:
-            "node-labels": "bgp=enable"
+  # 🛑 DO NOT inject the "bgp=enable" label here—only Workers run the BGP speaker!
+  # - name: node-labels
+  #   inline:
+  #     machine:
+  #       kubelet:
+  #         extraArgs:
+  #           "node-labels": "bgp=enable"
   # (Add machine-certs patch here only if you kept it)
   - name: static-ip
     inline:
@@ -66,7 +66,7 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
-  # 🆕 inject "bgp=enable" node label for all Workers
+  # ✅ Correct: inject the "bgp=enable" node label only on worker nodes (eligible for BGP speaking).
   - name: node-labels
     inline:
       machine:
