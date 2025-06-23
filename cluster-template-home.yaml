@@ -112,7 +112,7 @@ patches:
           hostname: "worker1"
           interfaces:
             - deviceSelector:
-                hardwareAddr: b0:41:6f:16:5e:67
+                hardwareAddr: b0:41:6f:16:5e:66
               dhcp: false
               addresses: [192.168.1.194/24]
               routes:
@@ -136,7 +136,7 @@ patches:
           hostname: "worker2"
           interfaces:
             - deviceSelector:
-                hardwareAddr: b0:41:6f:16:a2:3f
+                hardwareAddr: b0:41:6f:16:a2:3e
               dhcp: false
               addresses: [192.168.1.195/24]
               routes:
@@ -160,7 +160,7 @@ patches:
           hostname: "worker3"
           interfaces:
             - deviceSelector:
-                hardwareAddr: b0:41:6f:16:a3:01
+                hardwareAddr: b0:41:6f:16:a3:00
               dhcp: false
               addresses: [192.168.1.196/24]
               routes:

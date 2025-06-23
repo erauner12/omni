@@ -23,9 +23,21 @@ cluster:
           # ------------------------------------------------------------------
           k8sServiceHost: 192.168.1.193
           k8sServicePort: 6443
+
+          # 👇 WIDEN THESE TWO LINES FOR CLUSTER SAFETY
+          cluster-pool-ipv4-cidr: "10.0.0.0/8"
+          ipv4NativeRoutingCIDR: 10.0.0.0/8
+
           routingMode: native
+
+          # --------- NATIVE ROUTING (table 200) settings ----------
+          # Required for multi-node clusters to program direct node routes!
+          autoDirectNodeRoutes: true      # (MUST be named exactly as shown)
+          directRoutingDevice: enp1s0     # (main LAN NIC name, no quotes)
+          devices: "enp1s0"               # (must be quoted)
+          # --------------------------------------------------------
+
           tunnelProtocol: geneve
-          ipv4NativeRoutingCIDR: 10.0.0.0/24
           kubeProxyReplacement: true
           nodePort:
             enabled: true
