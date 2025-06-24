@@ -6,11 +6,27 @@
 
 ---
 
+## 0. CLI Configuration
+
+**Before starting the bootstrap process**, ensure your CLI tools are properly configured.
+
+If you're starting fresh or experiencing authentication issues, follow the complete setup process:
+
+👉 **[CLI Setup: True-From-Zero Rebuild](../../homelab-k8s/docs/CLI-SETUP.md)**
+
+This guide covers:
+- Complete cleanup of existing configurations
+- Fresh omnictl and talosctl setup
+- Authentication troubleshooting
+- OIDC vs break-glass configuration options
+
+---
+
 ## 1. Prerequisites
 
 | What                                                              | Why / Notes                                                      |
 | ----------------------------------------------------------------- | ---------------------------------------------------------------  |
-| **`omnictl` & `talosctl` CLIs**                                   | Install and configure both CLIs. Your `omniconfig.yaml` and `talosconfig.yaml` should be in place. See the [Omni README](./README.md) for setup. |
+| **`omnictl` & `talosctl` CLIs**                                   | Install and configure both CLIs. Your `omniconfig.yaml` and `talosconfig.yaml` should be in place. See the [CLI Setup Guide](../../homelab-k8s/docs/CLI-SETUP.md) for complete setup instructions. |
 | **Cluster Template**                                              | A complete `cluster-template-home.yaml` file, with correct machine UUIDs and patch paths.              |
 | **Nodes in Maintenance Mode**                                     | All cluster nodes should be powered on and booted into Talos maintenance mode (e.g., via PXE boot). They should appear in the Omni UI.        |
 
