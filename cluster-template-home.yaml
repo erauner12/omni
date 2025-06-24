@@ -25,6 +25,13 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
+  - name: kernel-iscsi
+    inline:
+      machine:
+        kernel:
+          modules:
+            - name: iscsi_tcp
+            - name: libiscsi
   # 🛑 DO NOT inject the "bgp=enable" label here—only Workers run the BGP speaker!
   # - name: node-labels
   #   inline:
@@ -52,6 +59,9 @@ patches:
           net.ipv4.conf.default.rp_filter: "0"
           net.ipv4.conf.enp1s0.rp_filter: "0"
           net.ipv4.conf.cilium_host.rp_filter: "0"
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/util-linux-tools
 ---
 kind: Workers
 name: workers
@@ -66,6 +76,13 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
+  - name: kernel-iscsi
+    inline:
+      machine:
+        kernel:
+          modules:
+            - name: iscsi_tcp
+            - name: libiscsi
   # ✅ Correct: inject the "bgp=enable" node label only on worker nodes (eligible for BGP speaking).
   - name: node-labels
     inline:
@@ -73,6 +90,9 @@ patches:
         kubelet:
           extraArgs:
             "node-labels": "bgp=enable"
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/util-linux-tools
 
 #######################################################################
 # ─── PER-NODE HOSTNAME + STATIC IP PATCHES ──────────────────────────
