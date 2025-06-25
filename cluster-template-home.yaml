@@ -57,6 +57,7 @@ patches:
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/util-linux-tools
+  - siderolabs/btrfs
 ---
 kind: Workers
 name: workers
@@ -83,6 +84,7 @@ patches:
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/util-linux-tools
+  - siderolabs/btrfs
 
 #######################################################################
 # ─── PER-NODE HOSTNAME + STATIC IP PATCHES ──────────────────────────

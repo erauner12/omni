@@ -1,9 +1,8 @@
 # Kernel modules required for Synology CSI on Talos
 # - iscsi_tcp, libiscsi: iSCSI block storage support
-# - btrfs: Required for Quadman's PV discovery mechanism via /sys/fs/btrfs
+# - btrfs: Now handled by siderolabs/btrfs systemExtension
 machine:
   kernel:
     modules:
       - name: iscsi_tcp
       - name: libiscsi
-      - name: btrfs
