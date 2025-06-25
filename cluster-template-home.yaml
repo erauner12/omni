@@ -25,13 +25,8 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
-  - name: kernel-iscsi
-    inline:
-      machine:
-        kernel:
-          modules:
-            - name: iscsi_tcp
-            - name: libiscsi
+  - name: kernel-storage
+    file: ./patches/kernel-iscsi.yaml
   # 🛑 DO NOT inject the "bgp=enable" label here—only Workers run the BGP speaker!
   # - name: node-labels
   #   inline:
@@ -76,13 +71,8 @@ patches:
     file: ./patches/machine-hostdns.yaml
   - name: kubelet
     file: ./patches/machine-kubelet.yaml
-  - name: kernel-iscsi
-    inline:
-      machine:
-        kernel:
-          modules:
-            - name: iscsi_tcp
-            - name: libiscsi
+  - name: kernel-storage
+    file: ./patches/kernel-iscsi.yaml
   # ✅ Correct: inject the "bgp=enable" node label only on worker nodes (eligible for BGP speaking).
   - name: node-labels
     inline:
