@@ -27,6 +27,7 @@ cluster:
               - monitoring
               - tailscale
               - velero
+              - management
             runtimeClasses: []
             usernames: []
           kind: PodSecurityConfiguration

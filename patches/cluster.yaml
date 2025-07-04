@@ -27,6 +27,7 @@ cluster:
               - longhorn
               - monitoring
               - tailscale
+              - management
             runtimeClasses: []
             usernames: []
           kind: PodSecurityConfiguration
