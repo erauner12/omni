@@ -62,7 +62,7 @@ services:
 
   traefik:
     container_name: traefik
-    image: traefik:v3.7.6
+    image: traefik:v3.7.7
     restart: always
     env_file: .env
     command:
