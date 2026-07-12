@@ -36,4 +36,5 @@ machine:
     - net.ifnames=0
   nodeLabels:
     storage: longhorn                           # Used for specifying which nodes to use for Longhorn.
+    node.longhorn.io/create-default-disk: "true" # Re-register /var/lib/longhorn after node reprovisioning.
     gpu.intel.com/device-present: "false"       # No Intel GPU on AMD Ryzen nodes
