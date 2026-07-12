@@ -73,21 +73,17 @@ cluster:
           # ------------------------------------------------------------------
           # Socket-level load balancing
           #
-          # hostNamespaceOnly: true bypasses socket LB in pod namespaces, falling
-          # back to tc-level (packet) load balancing. This is REQUIRED for:
-          # - Tailscale Kubernetes Operator (iptables-based proxy)
-          # - Istio/Linkerd service mesh sidecars
-          # - Any workload that relies on seeing original ClusterIP in iptables
+          # hostNamespaceOnly: false enables socket LB in ALL namespaces (host + pod).
+          # This is REQUIRED for iptables-based proxies like Tailscale to work with
+          # ClusterIP services. When true, socket LB only works in host namespace,
+          # and iptables-forwarded packets inside pods don't get proper service
+          # translation from tc BPF (causing connection timeouts).
           #
-          # Without this, socket LB intercepts at connect() syscall BEFORE iptables,
-          # causing Tailscale's DNAT rules to be bypassed (connection timeouts).
-          #
-          # See: https://tailscale.com/kb/1236/kubernetes-operator
           # See: https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/
           # ------------------------------------------------------------------
           socketLB:
             enabled: true
-            hostNamespaceOnly: true
+            hostNamespaceOnly: false
           bgpControlPlane:
             enabled: true
           bgp:

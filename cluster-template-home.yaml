@@ -73,7 +73,6 @@ systemExtensions:
 kind: Workers
 name: workers
 machines:
-  - 4913bb46-7cd8-2048-84c7-a8595f97a48c   # old CP becomes worker
   - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1 (offline right now)
   - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-2 (offline)
 patches:
@@ -105,6 +104,48 @@ systemExtensions:
   # AMD GPU support for hardware transcoding (Plex)
   - siderolabs/amdgpu
   - siderolabs/amd-ucode
+
+---
+# worker2 is intentionally isolated from the shared worker machine set.
+#
+# Incident 2026-07-12: this node repeatedly hard-froze shortly after the
+# siderolabs/amdgpu extension initialized. A minimal Talos image containing
+# amd-ucode and realtek-firmware, but no amdgpu, remained stable and the node
+# subsequently rejoined Kubernetes on the CPU-only schematic. Keep both the
+# amdgpu extension and patches/kernel-amdgpu.yaml out of this machine set.
+#
+# The Realtek firmware is also intentional: both RTL8168h/8111h adapters logged
+# missing rtl_nic/rtl8168h-2.fw without it. Re-enable GPU support only after
+# MemTest, BIOS/thermal checks, and an isolated newer Talos/kernel test pass.
+kind: Workers
+name: worker2
+machines:
+  - 4913bb46-7cd8-2048-84c7-a8595f97a48c
+patches:
+  - name: worker-base
+    file: ./patches/worker.yaml
+  - name: machine-hostdns
+    file: ./patches/machine-hostdns.yaml
+  - name: kubelet
+    file: ./patches/machine-kubelet.yaml
+  - name: kernel-storage
+    file: ./patches/kernel-iscsi.yaml
+  - name: machine-registries
+    file: ./patches/machine-registries.yaml
+  - name: spegel-containerd
+    file: ./patches/spegel-containerd.yaml
+  - name: node-labels
+    inline:
+      machine:
+        kubelet:
+          extraArgs:
+            "node-labels": "bgp=enable"
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/util-linux-tools
+  - siderolabs/btrfs
+  - siderolabs/amd-ucode
+  - siderolabs/realtek-firmware
 
 #######################################################################
 # ─── PER-NODE HOSTNAME + STATIC IP PATCHES ──────────────────────────
