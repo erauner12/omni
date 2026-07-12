@@ -37,4 +37,3 @@ machine:
   nodeLabels:
     storage: longhorn                           # Used for specifying which nodes to use for Longhorn.
     gpu.intel.com/device-present: "false"       # No Intel GPU on AMD Ryzen nodes
-    amd.com/gpu: "true"                         # AMD Radeon Graphics (integrated in Ryzen 7 5825U APUs)

@@ -97,6 +97,8 @@ patches:
         kubelet:
           extraArgs:
             "node-labels": "bgp=enable"
+        nodeLabels:
+          amd.com/gpu: "true"
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/util-linux-tools
