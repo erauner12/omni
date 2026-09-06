@@ -2,7 +2,7 @@
 kind: Cluster
 name: erauner-home                       # Cluster name in Omni
 talos:
-  version: v1.11.5               # Upgraded for AMD GPU support (requires v1.11+)
+  version: v1.12.12              # Intermediate minor before Talos 1.13 dual-issuer support
 kubernetes:
   version: 1.31.5                # latest patch in the supported minor
 features:
