@@ -75,8 +75,8 @@ systemExtensions:
 kind: Workers
 name: workers
 machines:
-  - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker-1 (offline right now)
-  - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker-2 (offline)
+  - 30467aa4-b8a4-2e43-8591-a8595f97a43c   # worker1
+  - d3945f76-fb6b-c244-9ca3-a8595f9b4f7e   # worker3
 patches:
   - name: worker-base
     file: ./patches/worker.yaml
@@ -86,8 +86,6 @@ patches:
     file: ./patches/machine-kubelet.yaml
   - name: kernel-storage
     file: ./patches/kernel-iscsi.yaml
-  - name: kernel-amdgpu
-    file: ./patches/kernel-amdgpu.yaml
   - name: machine-registries
     file: ./patches/machine-registries.yaml
   - name: spegel-containerd
@@ -100,13 +98,17 @@ patches:
           extraArgs:
             "node-labels": "bgp=enable"
         nodeLabels:
-          amd.com/gpu: "true"
+          # Explicit false replaces the existing label and excludes these nodes
+          # from the GPU operator's amd.com/gpu=true selector.
+          amd.com/gpu: "false"
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/util-linux-tools
   - siderolabs/btrfs
-  # AMD GPU support for hardware transcoding (Plex)
-  - siderolabs/amdgpu
+  # CPU-only recovery: both workers became unreachable with amdgpu SMU/gfxoff
+  # errors during the 1.12.12 rollout. Keep microcode, but no GPU extension or
+  # kernel-amdgpu patch until an isolated GPU stability test passes.
+  # Plex has no GPU device mount/request; Qwen remains suspended in GitOps.
   - siderolabs/amd-ucode
 
 ---
