@@ -1,0 +1,8 @@
+# gVisor requires user namespace creation. Scope this hardening exception to
+# worker2; the homelab-k8s Substrate canary pool is pinned to this node.
+# Talos documents 11255; its default of 0 makes runsc fork fail with ENOSPC.
+# https://github.com/siderolabs/extensions/blob/main/container-runtime/gvisor/README.md
+# No gVisor extension is needed: Substrate supplies its own pinned runsc binary.
+machine:
+  sysctls:
+    user.max_user_namespaces: "11255"
