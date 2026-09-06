@@ -65,8 +65,6 @@ patches:
           net.ipv4.conf.default.rp_filter: "0"
           net.ipv4.conf.enp1s0.rp_filter: "0"
           # net.ipv4.conf.cilium_host.rp_filter: "0"
-  - name: service-account-discovery-home
-    file: ./patches/service-account-discovery-home.yaml
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/util-linux-tools
