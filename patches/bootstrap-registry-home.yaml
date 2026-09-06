@@ -1,0 +1,10 @@
+# The singleton API must bootstrap without Spegel/Cilium/Nexus being available.
+# Talos 1.12 pulls etcd from registry.k8s.io; reach upstream before pod mirrors.
+machine:
+  registries:
+    mirrors:
+      registry.k8s.io:
+        endpoints:
+          - https://registry.k8s.io
+          - http://127.0.0.1:30020/v2/registry.k8s.io
+          - http://10.102.86.160:5004
