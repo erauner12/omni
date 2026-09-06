@@ -1,5 +1,41 @@
 # Home service-account issuer discovery
 
+## Updated plan: Talos 1.13 dual issuers
+
+**The single-issuer plan below is historical and must not be deployed.**
+PR #16 broke Omni proxy access and was reverted in PR #17.
+Deploy the updated patch only after PR #19 completes and all four nodes are
+healthy on Talos 1.13.10. It explicitly supplies two ordered issuer flags:
+
+1. `https://kubernetes.default.svc.cluster.local` signs new tokens.
+2. `https://[fdae:41e4:649b:9303::1]:10000` remains accepted for existing tokens
+   and Omni clients.
+
+Talos 1.13 accepts list-valued extraArgs; do not assume it appends the default
+issuer. The existing API audience, signing keys and anonymous-auth=false remain
+unchanged. No Substrate source/image changes are required.
+
+Take an etcd snapshot before deployment. Validate and diff the committed home
+template, then sync through Omni. The issuer-stage diff must only add the home
+control-plane ConfigPatch. Expect a brief singleton API-server restart.
+Verify both rendered issuer flags, the unchanged API audience, working Omni
+access, and all four Ready nodes. Verify that a token minted before the change
+still authenticates, and a new token has the new issuer and authenticates too.
+From an ordinary pod, verify authenticated discovery/JWKS using its mounted
+CA/token. Check CNI, DNS, storage, Kyverno and Argo against their baseline.
+Never print or commit tokens or private keys.
+
+Only then deploy homelab-k8s #1643, verify Substrate, and proceed to #1644.
+
+**Rollback:** use a GitOps PR to reorder the list (old issuer first, new second)
+and sync. Keep both issuers accepted; removing the patch would invalidate new
+tokens. Do not downgrade Talos while list-valued extraArgs remain configured.
+
+References: [Talos 1.13 argument builder](https://github.com/siderolabs/talos/blob/v1.13.10/pkg/argsbuilder/argsbuilder_args.go),
+[Kubernetes multiple issuers](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#serviceaccount-token-volume-projection).
+
+## Historical single-issuer plan (superseded)
+
 ## Problem and change
 
 The home cluster advertises its Omni/SideroLink control-plane endpoint,
