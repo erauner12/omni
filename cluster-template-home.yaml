@@ -208,6 +208,8 @@ patches:
 kind: Machine                           # worker2  → 192.168.1.195
 name: 4913bb46-7cd8-2048-84c7-a8595f97a48c
 patches:
+  - name: gvisor-userns-worker2
+    file: ./patches/gvisor-userns-worker2.yaml
   - name: set-nodename
     inline:
       machine:
