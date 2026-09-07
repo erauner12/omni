@@ -4,7 +4,7 @@ name: erauner-home                       # Cluster name in Omni
 talos:
   version: v1.13.10              # Supports ordered service-account issuer lists
 kubernetes:
-  version: 1.33.13               # Sequential hop; Cilium 1.18.13 supports this minor
+  version: 1.34.11               # Sequential hop; Cilium 1.19.7 supports this minor
 features:
   enableWorkloadProxy: true      # SaaS Omni feature – leave on
 patches:
