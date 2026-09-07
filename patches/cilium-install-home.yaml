@@ -222,7 +222,7 @@ cluster:
                   - -n
                   - cilium
                   - --version
-                  - 1.17.18        # Latest 1.17 patch before the next minor upgrade
+                  - 1.18.13        # Consecutive minor; supports Kubernetes 1.32 and 1.33
                 env:
                   # Use the node IP (pod IP on host network) instead of the
                   # Kubernetes service-clusterIP which isn't reachable yet.
