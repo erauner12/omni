@@ -71,19 +71,13 @@ cluster:
             mode: dsr          # Direct-Server-Return
             dsrDispatch: geneve
           # ------------------------------------------------------------------
-          # Socket-level load balancing
-          #
-          # hostNamespaceOnly: false enables socket LB in ALL namespaces (host + pod).
-          # This is REQUIRED for iptables-based proxies like Tailscale to work with
-          # ClusterIP services. When true, socket LB only works in host namespace,
-          # and iptables-forwarded packets inside pods don't get proper service
-          # translation from tc BPF (causing connection timeouts).
-          #
-          # See: https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/
+          # Preserve the running Helm release's host-only socket LB scope.
+          # Changing this datapath setting requires its own connectivity test;
+          # do not combine it with a Cilium/Kubernetes version upgrade.
           # ------------------------------------------------------------------
           socketLB:
             enabled: true
-            hostNamespaceOnly: false
+            hostNamespaceOnly: true
           bgpControlPlane:
             enabled: true
           bgp:
@@ -127,6 +121,7 @@ cluster:
           prometheus:
             enabled: true
           operator:
+            replicas: 1  # Preserve the running release's single operator.
             prometheus:
               enabled: true
           hubble:
@@ -227,7 +222,7 @@ cluster:
                   - -n
                   - cilium
                   - --version
-                  - 1.17.5         # pin to the same chart version you used
+                  - 1.17.18        # Latest 1.17 patch before the next minor upgrade
                 env:
                   # Use the node IP (pod IP on host network) instead of the
                   # Kubernetes service-clusterIP which isn't reachable yet.
