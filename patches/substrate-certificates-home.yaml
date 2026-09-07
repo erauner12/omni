@@ -1,0 +1,20 @@
+# Substrate 0.0.25 uses Kubernetes 1.35's beta pod certificate API and
+# projected trust bundles. Keep this home-only and separate from upgrades.
+cluster:
+  apiServer:
+    extraArgs:
+      feature-gates: ClusterTrustBundle=true,ClusterTrustBundleProjection=true,PodCertificateRequest=true
+      runtime-config: certificates.k8s.io/v1beta1=true
+  controllerManager:
+    extraArgs:
+      feature-gates: ClusterTrustBundle=true,ClusterTrustBundleProjection=true,PodCertificateRequest=true
+  scheduler:
+    extraArgs:
+      feature-gates: ClusterTrustBundle=true,ClusterTrustBundleProjection=true,PodCertificateRequest=true
+machine:
+  kubelet:
+    extraConfig:
+      featureGates:
+        ClusterTrustBundle: true
+        ClusterTrustBundleProjection: true
+        PodCertificateRequest: true
