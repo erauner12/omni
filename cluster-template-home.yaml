@@ -4,7 +4,7 @@ name: erauner-home                       # Cluster name in Omni
 talos:
   version: v1.13.10              # Supports ordered service-account issuer lists
 kubernetes:
-  version: 1.31.5                # latest patch in the supported minor
+  version: 1.32.13               # First sequential hop toward Substrate's Kubernetes 1.35 prerequisite
 features:
   enableWorkloadProxy: true      # SaaS Omni feature – leave on
 patches:
