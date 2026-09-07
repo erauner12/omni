@@ -75,15 +75,17 @@ a follow-up PR before attempting another upgrade.
 
 ## Remaining sequence
 
-1. Finish the 1.17 patch upgrade before moving to Cilium 1.18.
-2. Upgrade consecutive Cilium minors only. Check each release's Kubernetes
-   matrix and upgrade notes before advancing Kubernetes.
-3. Convert `network-secrets`'s `home-bgp-policy` to BGP v2 in a separate
-   `homelab-k8s` PR before upgrading to a release that removes the old policy.
-   Preserve pod CIDR and all LoadBalancer advertisements; expect BGP sessions
-   to restart during this conversion.
-4. Upgrade Kubernetes one minor per Omni PR toward 1.35, then enable the
+1. Reconcile Cilium 1.19.7 from 1.18.13 on Kubernetes 1.33.13. BGP v2 and
+   LoadBalancer pool v2 prerequisites passed live validation in
+   [homelab-k8s #1655](https://github.com/erauner/homelab-k8s/pull/1655) and
+   [#1656](https://github.com/erauner/homelab-k8s/pull/1656). The legacy peering
+   policy is absent; all worker routes and pool identities were preserved.
+2. Cilium 1.19.7's published Kubernetes matrix includes 1.32 through 1.35;
+   another Cilium minor is not required solely to reach Kubernetes 1.35.
+   Check subsequent releases' notes before any further Cilium upgrade.
+3. Upgrade Kubernetes one minor per Omni PR toward 1.35, then enable the
    Substrate certificate feature gates separately. Talos stays 1.13.10 unless
    a separately verified prerequisite requires otherwise.
 
-Reference: [upstream upgrade guide](https://github.com/cilium/cilium/blob/v1.17.18/Documentation/operations/upgrade.rst).
+References: [1.19 upgrade guide](https://github.com/cilium/cilium/blob/v1.19.7/Documentation/operations/upgrade.rst),
+[Kubernetes compatibility](https://github.com/cilium/cilium/blob/v1.19.7/Documentation/network/kubernetes/compatibility.rst).
