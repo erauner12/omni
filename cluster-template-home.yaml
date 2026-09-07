@@ -16,7 +16,8 @@ patches:
     file: ./patches/longhorn-install-home.yaml
   - name: longhorn-configure-home
     file: ./patches/longhorn-configure-home.yaml
-  # Add cert patches here later if you decide to keep them
+  - name: substrate-certificates-home
+    file: ./patches/substrate-certificates-home.yaml
 
 ---
 kind: ControlPlane
